@@ -1,0 +1,341 @@
+﻿@model EASY.Models.Employee
+<div class="mainframe" ng-controller="newEmployeeController" ng-init="init(@Newtonsoft.Json.JsonConvert.SerializeObject(Model))">
+    <div class="jumbotron">
+
+        <h3>Cadastrar Candidato</h3>
+
+        <p ng-hide="stage != 1">Já agradecemos o seu contato, confira que você não precisa preencher o formulário completo caso já tenha essas informações no seu linkedin, e no final confira os links dos tutoriais (desenvolvedores).</p>
+        <p ng-hide="stage != 2">Você pode optar em receber seu pagamento pelo Paypal, PagSeguro ou contas bancarias convencionais</p>
+        <p ng-hide="stage != 3">Avalie-se de 0 a 5 quanto aos conhecimentos especificados abaixo, e tudo bem se não souber de muitas coisas, o importante é que seja sincero!</p>
+
+        <div class="row bs-wizard" style="border-bottom:0;">
+            <div class="col-4 bs-wizard-step" ng-class="{active: newEmployeeOccupation.$pristine  && stage == 1, complete: newEmployeeOccupation.$dirty || stage > 1}">
+                <div class="text-center bs-wizard-stepnum">Área de atuação</div>
+                <div class="progress"><div class="progress-bar"></div></div>
+                <a href="#" class="bs-wizard-dot"></a>
+            </div>
+
+            <div class="col-4 bs-wizard-step" ng-class="{disabled : stage < 2, active: newEmployeeBankInfo.$pristine && stage == 2, complete: newEmployeeBankInfo.$dirty || stage >= 2}">
+                <div class="text-center bs-wizard-stepnum">Informação bancária</div>
+                <div class="progress"><div class="progress-bar"></div></div>
+                <a href="#" class="bs-wizard-dot"></a>
+            </div>
+
+            <div class="col-4 bs-wizard-step" ng-class="{disabled : stage < 3, active: stage == 3, complete: newEmployeeKnowledges.$dirty && stage == 3}">
+                <div class="text-center bs-wizard-stepnum">Conhecimentos</div>
+                <div class="progress"><div class="progress-bar"></div></div>
+                <a href="#" class="bs-wizard-dot"></a>
+            </div>
+        </div>
+
+        <div class="legend" style="margin-top:0px;">* Obrigatório</div>
+        <hr>
+
+        <div id="occupation" ng-hide="stage != 1">
+            <form name="newEmployeeOccupation" class="form-group">
+                <div class="row">
+                    <div class="col-6">
+                        <label class="label">Nome *</label>
+                        <input class="form-control" type="text" ng-model="employee.Name" name="name" placeholder="Nome" ng-required="true" ng-minlength="3" />
+                    </div>
+                    <div class="col-6">
+                        <label class="label">E-mail *</label>
+                        <input class="form-control" type="text" ng-model="employee.Contact.Email" name="email" placeholder="E-mail" ng-required="true" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <label class="label">Telefone *</label>
+                        <input class="form-control" type="text" ng-model="employee.Contact.Phone" name="phone" placeholder="(xx)xxxxx-xxxx" ng-required="true" mask-phone />
+                    </div>
+                    <div class="col-6">
+                        <label class="label">Portifólio</label>
+                        <input class="form-control" type="text" ng-model="employee.Portifolio" name="portifolio" placeholder="Portifólio" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <label class="label">Linkedin</label>
+                        <input class="form-control" type="text" ng-model="employee.Contact.Linkedin" name="linkedin" placeholder="Linkedin" />
+                    </div>
+                    <div class="col-6">
+                        <label class="label">Skype *</label>
+                        <input class="form-control" type="text" ng-model="employee.Contact.Skype" name="skype" placeholder="Skype" ng-required="true" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <label class="label">Cidade *</label>
+                        <input class="form-control" type="text" ng-model="employee.City" name="city" placeholder="Cidade" ng-required="true" />
+                    </div>
+                    <div class="col-4">
+                        <label class="label">Estado *</label>
+                        <input class="form-control" type="text" ng-model="employee.State" name="state" placeholder="Estado" ng-required="true" />
+                    </div>
+                    <div class="col-4">
+                        <label class="label">Pretensão salarial por hora? *</label>
+                        <input class="form-control" type="number" ng-model="employee.SalaryRequirement" name="salaryRequirement" placeholder="Pretensão Salarial" ng-required="true" />
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top:15px;">
+                    <div class="row">
+                        <div class="col-12">
+                            <label class="label">Qual é sua disponibilidade para trabalhar hoje? *</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" ng-model="employee.Availability.Until4Hours" name="availability" ng-required="availability.choices==0" ng-click="availability.validate($event)">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Até 4 horas por dia</span>
+                            </label>
+                        </div>
+                        <div class="col-6">
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" ng-model="employee.Availability.From4To6Hours" name="availability" ng-required="availability.choices==0" ng-click="availability.validate($event)">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">De 4 á 6 horas por dia</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" ng-model="employee.Availability.From6To8Hours" name="availability" ng-required="availability.choices==0" ng-click="availability.validate($event)">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">De 6 á 8 horas por dia</span>
+                            </label>
+                        </div>
+                        <div class="col-6">
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" ng-model="employee.Availability.Upto8Hours" name="availability" ng-required="availability.choices==0" ng-click="availability.validate($event)">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Acima de 8 horas por dia (tem certeza?)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-12">
+                            <label class="label">Pra você qual é o melhor horário para trabalhar? *</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" ng-model="employee.WorkingHour.Morning" name="workingHour" ng-required="workingHour.choices==0" ng-click="workingHour.validate($event)">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Manhã (de 08:00 ás 12:00)</span>
+                            </label>
+                        </div>
+                        <div class="col-6">
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" ng-model="employee.WorkingHour.Afternoon" name="workingHour" ng-required="workingHour.choices==0" ng-click="workingHour.validate($event)">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Tarde (de 13:00 ás 18:00)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" ng-model="employee.WorkingHour.Night" name="workingHour" ng-required="workingHour.choices==0" ng-click="workingHour.validate($event)">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Noite (de 19:00 as 22:00)</span>
+                            </label>
+                        </div>
+                        <div class="col-6">
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" ng-model="employee.WorkingHour.Dawn" name="workingHour" ng-required="workingHour.choices==0" ng-click="workingHour.validate($event)">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Madrugada (de 22:00 em diante)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" ng-model="employee.WorkingHour.Business" name="workingHour" ng-required="workingHour.choices==0" ng-click="workingHour.validate($event)">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Comercial (de 08:00 as 18:00)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <button class="btn btn-outline-danger" ng-click="home()">Cancelar</button>
+            <button class="btn btn-outline-primary right" ng-click="foward()" ng-disabled="newEmployeeOccupation.$invalid">Avançar</button>
+        </div>
+
+        <div id="bankInformantion" ng-hide="stage != 2">
+            <form name="newEmployeeBankInfo" class="form-group">
+                <div class="row">
+                    <div class="col-12">
+                        <label class="label">Banco</label>
+                        <div class="funkyradio row">
+                            <div class="funkyradio-default col-6">
+                                <input type="radio" name="bank" id="paypal" ng-model="employee.PaymentType" value="0" />
+                                <label for="paypal">Paypal</label>
+                            </div>
+                            <div class="funkyradio-default col-6">
+                                <input type="radio" name="bank" id="bank" ng-model="employee.PaymentType" value="1" />
+                                <label for="bank">Banco Brasileiro</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="width:500px; margin:auto;">
+                    <div class="row" ng-show="employee.PaymentType == '0'">
+                        <div class="col-12">
+                            <label class="label">Paypal *</label>
+                            <input class="form-control" type="text" ng-model="employee.PaypalInfo.Description" name="paypal" placeholder="Paypal" ng-required="employee.PaymentType == '0'" />
+                        </div>
+                    </div>
+                    <div ng-show="employee.PaymentType == '1'">
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="label">Titular *</label>
+                                <input class="form-control" type="text" ng-model="employee.BankInfo.HolderName" name="HolderName" placeholder="Nome" ng-required="employee.PaymentType == '1'" />
+                            </div>
+                            <div class="col-6">
+                                <label class="label">CPF *</label>
+                                <input class="form-control" type="text" ng-model="employee.BankInfo.Cpf" name="cpf" placeholder="CPF" ng-required="employee.PaymentType == '1'" mask-cpf />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="label">Banco *</label>
+                                <input class="form-control" type="text" ng-model="employee.BankInfo.BankName" name="bankName" placeholder="Nome" ng-required="employee.PaymentType == '1'" />
+                            </div>
+                            <div class="col-6">
+                                <label class="label">Agência *</label>
+                                <input class="form-control" type="text" ng-model="employee.BankInfo.Agency" name="agency" placeholder="Agência" ng-required="employee.PaymentType == '1'" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="label">Tipo de Conta *</label>
+                                <select class="form-control" ng-model="employee.BankInfo.AccountType" ng-required="employee.PaymentType == '1'">
+                                    <option value="">Selecione o tipo</option>
+                                    <option value="chain">Conta Corrente</option>
+                                    <option value="savings">Poupança</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="label">Nº Conta *</label>
+                                <input class="form-control" type="text" ng-model="employee.BankInfo.AccountNumber" name="accountNumber" placeholder="Nº Conta" ng-required="employee.PaymentType === '1'" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <button class="btn btn-outline-secondary" ng-click="back()">Voltar</button>
+            <button class="btn btn-outline-danger" ng-click="home()">Cancelar</button>
+            <button class="btn btn-outline-primary right" ng-click="foward()" ng-disabled="newEmployeeBankInfo.$invalid">{{employee.PaymentType >=0 ? "Avançar" : "Pular"}}</button>
+        </div>
+
+        <div id="knowledges" ng-hide="stage != 3">
+            <form name="newEmployeeKnowledges" class="form-group">
+                <div class="row" ng-repeat="knowledge in knowledges track by knowledge.KnowledgeID">
+                    <div class="col-12" style="margin-bottom: 40px;">
+                        <label class="label">{{knowledge.Description + (knowledge.Required ? " *" : "")}}</label>
+                        <div class="row optionsKnowledge">
+                            <div class="col-2">
+                                <label class="label" style="font-size:14px;">Não Conheço</label>
+                            </div>
+                            <div class="col-8">
+                                <div class="optionKnowledge-value row">
+                                    <div class="col-2">
+                                        <label class="optionKnowledge-value-label">0</label>
+                                        <input type="radio" class="optionKnowledge" ng-model="knowledge.Level" value="0" ng-required="{{knowledge.Required}}" />
+                                    </div>
+                                    <div class="col-2">
+                                        <label class="optionKnowledge-value-label">1</label>
+                                        <input type="radio" class="optionKnowledge" ng-model="knowledge.Level" value="1" ng-required="{{knowledge.Required}}" />
+                                    </div>
+                                    <div class="col-2">
+                                        <label class="optionKnowledge-value-label">2</label>
+                                        <input type="radio" class="optionKnowledge" ng-model="knowledge.Level" value="2" ng-required="{{knowledge.Required}}" />
+                                    </div>
+                                    <div class="col-2">
+                                        <label class="optionKnowledge-value-label">3</label>
+                                        <input type="radio" class="optionKnowledge" ng-model="knowledge.Level" value="3" ng-required="{{knowledge.Required}}" />
+                                    </div>
+                                    <div class="col-2">
+                                        <label class="optionKnowledge-value-label">4</label>
+                                        <input type="radio" class="optionKnowledge" ng-model="knowledge.Level" value="4" ng-required="{{knowledge.Required}}" />
+                                    </div>
+                                    <div class="col-2">
+                                        <label class="optionKnowledge-value-label">5</label>
+                                        <input type="radio" class="optionKnowledge" ng-model="knowledge.Level" value="5" ng-required="{{knowledge.Required}}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <label class="label" style="font-size:14px;">Sênior</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12" style="margin-bottom: 40px;">
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="label">Outras Linguagens e/ou conhecimentos: </label>
+                                <input class="form-control" type="text" ng-model="employee.otherKnowledge.Knowledge.Description" placeholder="Outras Linguagens e/ou conhecimentos" />
+                            </div>
+                        </div>
+                        <div class="row optionsKnowledge">
+                            <div class="col-2">
+                                <label class="label" style="font-size:14px;">Não Conheço</label>
+                            </div>
+                            <div class="col-8">
+                                <div class="optionKnowledge-value row">
+                                    <div class="col-2">
+                                        <label class="optionKnowledge-value-label">0</label>
+                                        <input type="radio" class="optionKnowledge" ng-model="employee.otherKnowledge.Level" value="0" />
+                                    </div>
+                                    <div class="col-2">
+                                        <label class="optionKnowledge-value-label">1</label>
+                                        <input type="radio" class="optionKnowledge" ng-model="employee.otherKnowledge.Level" value="1" />
+                                    </div>
+                                    <div class="col-2">
+                                        <label class="optionKnowledge-value-label">2</label>
+                                        <input type="radio" class="optionKnowledge" ng-model="employee.otherKnowledge.Level" value="2" />
+                                    </div>
+                                    <div class="col-2">
+                                        <label class="optionKnowledge-value-label">3</label>
+                                        <input type="radio" class="optionKnowledge" ng-model="employee.otherKnowledge.Level" value="3" />
+                                    </div>
+                                    <div class="col-2">
+                                        <label class="optionKnowledge-value-label">4</label>
+                                        <input type="radio" class="optionKnowledge" ng-model="employee.otherKnowledge.Level" value="4" />
+                                    </div>
+                                    <div class="col-2">
+                                        <label class="optionKnowledge-value-label">5</label>
+                                        <input type="radio" class="optionKnowledge" ng-model="employee.otherKnowledge.Level" value="5" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <label class="label" style="font-size:14px;">Sênior</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label class="label">Link CRUD *</label>
+                        <input class="form-control" type="text" ng-model="employee.LinkCrud" name="linkCrud" placeholder="Link" ng-required="true" />
+                    </div>
+                </div>
+            </form>
+            <button class="btn btn-outline-secondary" ng-click="back()">Voltar</button>
+            <button class="btn btn-outline-danger" ng-click="home()">Cancelar</button>
+            <button class="btn btn-outline-primary right" ng-click="addEmployee(employee)" ng-disabled="newEmployeeKnowledges.$invalid">Salvar</button>
+        </div>
+    </div>
+</div>

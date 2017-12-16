@@ -1,0 +1,35 @@
+﻿@model IEnumerable<EASY.Models.Employee>
+<div class="mainframe" ng-controller="formularioEasyCtrl" ng-init="init(@Newtonsoft.Json.JsonConvert.SerializeObject(Model), @Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag))">
+    <div class="jumbotron">
+        <h3 ng-bind="title"></h3>
+
+        <div style="margin-top:20px">
+            <a href="#" class="btn btn-outline-primary right" ng-click="newEmployee(employees)">Novo</a>
+            <a ng-click="callEdit(employees)" class="btn btn-outline-secondary right" ng-if="hasOneSelected">Editar</a>
+            <button class="btn btn-outline-danger right" ng-click="deleteEmployees(employees)" ng-if="hasSelected">Excluir</button>
+        </div>
+        
+        <div class="legend" ng-hide="hasSelected">Selecione um item para alterar</div>
+        <table class="table table-striped">
+            <tr>
+                <th></th>
+                <th>Nome</th>
+                <th>Skype</th>
+                <th>Telefone (Whatsapp)</th>
+                <th>Cidade - Estado</th>
+            </tr>
+            <tr ng-repeat="employee in employees track by employee.EmployeeID" ng-click="selectRow($event, employee)">
+                <td>
+                    <label class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" ng-model="employee.Selected" />
+                        <span class="custom-control-indicator"></span>
+                    </label>
+                </td>
+                <td>{{employee.Name}}</td>
+                <td>{{employee.Contact.Skype}}</td>
+                <td>{{employee.Contact.Phone}}</td>
+                <td>{{employee.City + " - " + employee.State}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
